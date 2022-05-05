@@ -1,6 +1,6 @@
 variables:
   - name: workingDirectory
-    value: frontend/login/
+    value: packages/webapp/
 
 trigger:
   batch: true
@@ -9,15 +9,15 @@ trigger:
       - master
   paths:
     include:
-      - frontend/login
+      - packages/webapp
     exclude:
-      - frontend/login/.vscode
-      - frontend/login/.yarn
-      - frontend/login/scripts
-      - frontend/login/.gitignore
-      - frontend/login/.yarnrc
-      - frontend/login/.yarnrc.yml
-      - frontend/login/README.md
+      - packages/webapp/.vscode
+      - packages/webapp/.yarn
+      - packages/webapp/scripts
+      - packages/webapp/.gitignore
+      - packages/webapp/.yarnrc
+      - packages/webapp/.yarnrc.yml
+      - packages/webapp/README.md
 
 pr:
   branches:
@@ -25,15 +25,15 @@ pr:
       - master
   paths:
     include:
-      - frontend/login
+      - packages/webapp
     exclude:
-      - frontend/login/.vscode
-      - frontend/login/.yarn
-      - frontend/login/scripts
-      - frontend/login/.gitignore
-      - frontend/login/.yarnrc
-      - frontend/login/.yarnrc.yml
-      - frontend/login/README.md
+      - packages/webapp/.vscode
+      - packages/webapp/.yarn
+      - packages/webapp/scripts
+      - packages/webapp/.gitignore
+      - packages/webapp/.yarnrc
+      - packages/webapp/.yarnrc.yml
+      - packages/webapp/README.md
 
 pool:
   vmImage: ubuntu-latest
