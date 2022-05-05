@@ -12,7 +12,7 @@ stages:
       environment: Netlify Test
       assetsDirectory: ${{ parameters.workingDirectory }}src/assets
       siteId: 3e82272b-a700-487a-aa13-93791f99cb4d
-      sitemapBaseUrl: https://salad-com-login-test.netlify.app/
+      sitemapBaseUrl: https://salad-com-app-test.netlify.app/
       siteName: test
       context: deploy-preview
       conditional: false
@@ -24,10 +24,10 @@ stages:
       environment: Netlify Test
       assetsDirectory: ${{ parameters.workingDirectory }}src/assets
       siteId: 3e82272b-a700-487a-aa13-93791f99cb4d
-      sitemapBaseUrl: https://salad-com-login-test.netlify.app/
+      sitemapBaseUrl: https://salad-com-app-test.netlify.app/
       siteName: test
       context: production
-      conditional: true
+      conditional: false
   - template: ./deploy-stage.yaml
     parameters:
       workingDirectory: ${{ parameters.workingDirectory }}
@@ -36,7 +36,7 @@ stages:
       environment: Netlify Login App
       assetsDirectory: ${{ parameters.workingDirectory }}src/assets
       siteId: 3ccbfa77-4cab-49d4-a980-61976c08c45c
-      sitemapBaseUrl: https://salad-com-login.netlify.app/
+      sitemapBaseUrl: https://salad-com-app.netlify.app/
       siteName: production
       context: production
       conditional: true

@@ -17,30 +17,43 @@ try {
 
     # Setting up environment variables
     Write-LogSection -Content 'Setting up environment variables...'
+    if (Test-AzureDevOpsEnvironment) {
+        $Env:REACT_APP_BUILD = $Env:BUILD_SOURCEVERSION
+    }
+    else {
+        Write-LogCommand -Content '$Env:REACT_APP_BUILD = & git rev-parse HEAD'
+        $Env:REACT_APP_BUILD = & git rev-parse HEAD
+        Assert-LastExitCodeSuccess -LastExecutableName 'git'
+    }
     if ($Context -eq 'production') {
-        Write-LogInfo -Content 'Setting public url and mixpanel token.'
-        $Env:PUBLIC_URL = '/login'
-        if ($SiteName -eq 'test') {
+        $Env:PUBLIC_URL = '/app'
+        if ($SiteName = 'test') {
             $Env:REACT_APP_MIXPANEL_TOKEN = '4b245bace4eed86ffdfa35efc3addf1d'
         }
         else {
             $Env:REACT_APP_MIXPANEL_TOKEN = '68db9194f229525012624f3cf368921f'
         }
     }
-    else {
-        $Env:PUBLIC_URL = ''
-    }
-
-    if (($Context -ne 'production') -or ($SiteName -eq 'test')) {
-        Write-LogSection -Content 'Setting React API URL.'
+    if (($Context -eq 'deploy-preview') -or ($SiteName = 'test')) {
         $Env:REACT_APP_API_URL = 'https://app-api-testing.salad.io'
+        $Env:REACT_APP_PAYPAL_URL = 'https://www.sandbox.paypal.com/connect/?flowEntry=static&client_id=AYjYnvjB968mKTIhMqUtLlNa8CJuF9rg_Q4m0Oym5gFvBkZEMPPoooXcG94OjSCjih7kI1_KM25EgfDs&response_type=code&scope=openid%20email%20https%3A%2F%2Furi.paypal.com%2Fservices%2Fpaypalattributes&redirect_uri=https%253A%252F%252Fapp-api-testing.salad.io%252Fapi%252Fv2%252Fpaypal-account-callback'
+        $Env:REACT_APP_PROHASHING_USERNAME = 'saladtest'
+        $Env:REACT_APP_SEARCH_ENGINE = 'salad-rewards-test'
+        $Env:REACT_APP_SEARCH_KEY = 'search-qced4ibef8m4s7xacm9hoqyk'
+        $Env:REACT_APP_STRAPI_UPLOAD_URL = 'https://cms-api-testing.salad.io'
+        $Env:REACT_APP_UNLEASH_API_KEY = 'zrujLzhnwVZkIOlS74oZZ0DK7ZXs3Ifo'
+        $Env:REACT_APP_UNLEASH_URL = 'https://features-testing.salad.com/proxy'
     }
 
     # Building with Netlify CLI
-    Write-LogSection -Content 'Building site preview...'
+    Write-LogSection -Content 'Building site with Netlify...'
     Write-LogCommand -Content "netlify build --context $Context"
     & netlify build --context $Context
     Assert-LastExitCodeSuccess -LastExecutableName 'netlify'
+
+    Write-LogSection -Content 'Embedding version...'
+    "${Env:REACT_APP_BUILD}" | Out-File -FilePath ./build/version.txt
+    Write-LogInfo -Content 'Embedded version.'
 }
 catch {
     if (($null -ne $_.ErrorDetails) -and ($null -ne $_.ErrorDetails.Message)) {
