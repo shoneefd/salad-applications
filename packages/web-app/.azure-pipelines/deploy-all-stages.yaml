@@ -1,0 +1,30 @@
+parameters:
+  - name: workingDirectory
+    type: string
+    default: ''
+
+stages:
+  - template: ./deploy-stage.yaml
+    parameters:
+      workingDirectory: ${{ parameters.workingDirectory }}
+      name: DeployPreview
+      displayName: Create Deploy-Preview
+      environment: Netlify Test
+      assetsDirectory: ${{ parameters.workingDirectory }}src/assets
+      siteId: fce3950b-4efe-43db-9242-37d3204b7ce1
+      sitemapBaseUrl: https://salad-web-app.netlify.app/
+      siteName: production
+      context: deploy-preview
+      conditional: false
+  - template: ./deploy-stage.yaml
+    parameters:
+      workingDirectory: ${{ parameters.workingDirectory }}
+      name: ProductionDeploy
+      displayName: Deploy to Production
+      environment: Netlify Web App
+      assetsDirectory: ${{ parameters.workingDirectory }}src/assets
+      siteId: fce3950b-4efe-43db-9242-37d3204b7ce1
+      sitemapBaseUrl: https://salad-web-app.netlify.app/
+      siteName: production
+      context: production
+      conditional: true
