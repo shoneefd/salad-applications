@@ -1,0 +1,42 @@
+parameters:
+  - name: workingDirectory
+    type: string
+    default: ''
+
+stages:
+  - template: ./deploy-stage.yaml
+    parameters:
+      workingDirectory: ${{ parameters.workingDirectory }}
+      name: TestDeployPreview
+      displayName: Deploy-Preview to Test
+      environment: Netlify Test
+      assetsDirectory: ${{ parameters.workingDirectory }}src/assets
+      siteId: 3e82272b-a700-487a-aa13-93791f99cb4d
+      sitemapBaseUrl: https://salad-com-login-test.netlify.app/
+      siteName: test
+      context: deploy-preview
+      conditional: false
+  - template: ./deploy-stage.yaml
+    parameters:
+      workingDirectory: ${{ parameters.workingDirectory }}
+      name: TestDeploy
+      displayName: Deploy to Test
+      environment: Netlify Test
+      assetsDirectory: ${{ parameters.workingDirectory }}src/assets
+      siteId: 3e82272b-a700-487a-aa13-93791f99cb4d
+      sitemapBaseUrl: https://salad-com-login-test.netlify.app/
+      siteName: test
+      context: production
+      conditional: true
+  - template: ./deploy-stage.yaml
+    parameters:
+      workingDirectory: ${{ parameters.workingDirectory }}
+      name: ProductionDeploy
+      displayName: Deploy to Production
+      environment: Netlify Login App
+      assetsDirectory: ${{ parameters.workingDirectory }}src/assets
+      siteId: 3ccbfa77-4cab-49d4-a980-61976c08c45c
+      sitemapBaseUrl: https://salad-com-login.netlify.app/
+      siteName: production
+      context: production
+      conditional: true

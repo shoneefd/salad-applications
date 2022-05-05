@@ -1,0 +1,44 @@
+variables:
+  - name: workingDirectory
+    value: frontend/login/
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - frontend/login
+    exclude:
+      - frontend/login/.vscode
+      - frontend/login/.yarn
+      - frontend/login/scripts
+      - frontend/login/.gitignore
+      - frontend/login/.yarnrc
+      - frontend/login/.yarnrc.yml
+      - frontend/login/README.md
+
+pr:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - frontend/login
+    exclude:
+      - frontend/login/.vscode
+      - frontend/login/.yarn
+      - frontend/login/scripts
+      - frontend/login/.gitignore
+      - frontend/login/.yarnrc
+      - frontend/login/.yarnrc.yml
+      - frontend/login/README.md
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - template: .azure-pipelines/deploy-all-stages.yaml
+    parameters:
+      workingDirectory: $(Build.Repository.LocalPath)/$(workingDirectory)
